@@ -21,6 +21,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_host
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=mysql
@@ -32,3 +33,11 @@ services:
       - 8080:80
     volumes:
       - /sessions
+  
+  redis:
+    image: "redis:latest"
+    container_name: redis_host
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./docker/redis/data:/data"
