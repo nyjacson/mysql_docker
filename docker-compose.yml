@@ -1,0 +1,34 @@
+version: '3.3'
+
+mysql:
+  image: mysql:5.7
+  build: ./docker/mysql 
+  container_name: mysql_host
+  restart: always
+  volumes:
+    - ./docker/mysql/initdb.d:/docker-entrypoint-initdb.d
+    - ./docker/mysql/data:/var/lib/mysql
+    - ./docker/mysql/conf.d:/etc/mysql/conf.d
+    - ./docker/mysql/log:/var/log/mysql
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: test_database
+    MYSQL_USER: user1
+    MYSQL_PASSWORD: hoge
+    TZ: 'Asia/Tokyo'
+  ports:
+    - 3306:3306
+
+phpmyadmin:
+  image: phpmyadmin/phpmyadmin
+  environment:
+    - PMA_ARBITRARY=1
+    - PMA_HOST=mysql
+    - PMA_USER=root
+    - PMA_PASSWORD=root
+  links:
+    - mysql
+  ports:
+     - 8080:80
+  volumes:
+     - /sessions
